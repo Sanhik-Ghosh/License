@@ -1,48 +1,43 @@
-import pyttsx3
 import random
-import time
 
-# Initialize voice engine
-engine = pyttsx3.init()
+# ---------------- USER CLASS ----------------
+class User:
+    def __init__(self, name, age, test_passed):
+        self.name = name
+        self.age = age
+        self.test_passed = test_passed
 
-# Optional: change voice (0 = male, 1 = female depending on system)
-voices = engine.getProperty('voices')
-engine.setProperty('voice', voices[0].id)
+# ---------------- LICENSE SYSTEM ----------------
+class LicenseSystem:
+    def __init__(self):
+        self.licenses = {}
 
-# Adjust speed
-engine.setProperty('rate', 170)
+    def check_eligibility(self, user):
+        if user.age >= 18 and user.test_passed:
+            return True
+        return False
 
-roasts = [
-    "Sanhik, bro writes code like WiFi on one bar",
-    "Sanhik's code has more bugs than a jungle",
-    "Even Python is confused reading Sanhik's logic",
-    "Sanhik doesn't debug... he just hopes",
-    "Indentation left Sanhik's life long ago",
-    "Sanhik copy pastes and still gets errors",
-    "Bro named Sanhik but coding level still tutorial mode",
-    "Sanhik's code runs only when luck is strong",
-    "Compiler sees Sanhik's code and says I am tired",
-    "Sanhik versus syntax error is a daily fight"
-]
+    def generate_license_number(self):
+        return "DL-" + str(random.randint(10000, 99999))
 
-print("\n💻 Initializing Voice Roast Engine...\n")
-time.sleep(1)
+    def issue_license(self, user):
+        if self.check_eligibility(user):
+            license_no = self.generate_license_number()
+            self.licenses[user.name] = license_no
+            print(f"✅ License Issued to {user.name}")
+            print(f"🪪 License Number: {license_no}")
+        else:
+            print(f"❌ {user.name} is NOT eligible for a license.")
 
-engine.say("Initializing roast for Sanhik")
-engine.runAndWait()
+# ---------------- MAIN PROGRAM ----------------
+system = LicenseSystem()
 
-time.sleep(1)
+name = input("Enter your name: ")
+age = int(input("Enter your age: "))
+test = input("Did you pass driving test? (yes/no): ").lower()
 
-for i in range(5):
-    roast = random.choice(roasts)
-    print("👉", roast)
-    
-    engine.say(roast)
-    engine.runAndWait()
-    
-    time.sleep(1)
+test_passed = True if test == "yes" else False
 
-engine.say("Roast complete. Sanhik needs serious coding upgrade.")
-engine.runAndWait()
+user = User(name, age, test_passed)
 
-print("\n💀 Roast Complete.\n")
+system.issue_license(user)
