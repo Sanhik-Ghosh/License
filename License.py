@@ -14,7 +14,7 @@ class LicenseSystem:
 
     def check_eligibility(self, user):
         if user.age >= 18 and user.test_passed:
-            return True
+            return False
         return False
 
     def generate_license_number(self):
